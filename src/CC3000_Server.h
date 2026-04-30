@@ -1,6 +1,6 @@
 /**************************************************************************/
 /*! 
-  @file     Adafruit_CC3000_Server.h
+  @file     CC3000_Server.h
   @author   Tony DiCola (tony@tonydicola.com)
   @license  BSD (see license.txt) 
 
@@ -19,10 +19,10 @@
 */
 /**************************************************************************/
 
-#ifndef ADAFRUIT_CC3000_SERVER_H
-#define ADAFRUIT_CC3000_SERVER_H
+#ifndef CC3000_SERVER_H
+#define CC3000_SERVER_H
 
-#include "Adafruit_CC3000.h"
+#include "CC3000.h"
 
 #include "Client.h"
 #include "Server.h"
@@ -35,9 +35,9 @@
 // and acts like a client instance value.  This is done to mimic the semantics 
 // of the Ethernet library, without running into problems allowing client buffers
 // to be copied and get out of sync.
-class Adafruit_CC3000_ClientRef : public Client {
+class CC3000_ClientRef : public Client {
  public:
-  Adafruit_CC3000_ClientRef(Adafruit_CC3000_Client* client);
+  CC3000_ClientRef(CC3000_Client* client);
   // Return true if the referenced client is connected.  This is provided for
   // compatibility with Ethernet library code.
   operator bool();
@@ -71,15 +71,15 @@ class Adafruit_CC3000_ClientRef : public Client {
   // Hide the fact that users are really dealing with a pointer to a client
   // instance.  Note: this class does not own the contents of the client
   // pointer and should NEVER attempt to free/delete this pointer.
-  Adafruit_CC3000_Client* _client;
+  CC3000_Client* _client;
 
 };
 
 
-class Adafruit_CC3000_Server : public Server {
+class CC3000_Server : public Server {
 public:
   // Construct a TCP server to listen on the specified port.
-  Adafruit_CC3000_Server(uint16_t port);
+  CC3000_Server(uint16_t port);
   // Return the index of a client instance with data available to read.
   // This is useful if you need to keep track of your own client state, you can
   // index into an array of client state based on the available index returned
@@ -87,9 +87,9 @@ public:
   // if the available client is connecting for the first time.
   int8_t availableIndex(bool *newClient = NULL);
   // Get a client instance from a given index.
-  Adafruit_CC3000_ClientRef getClientRef(int8_t clientIndex);
+  CC3000_ClientRef getClientRef(int8_t clientIndex);
   // Return a reference to a client instance which has data available to read.
-  Adafruit_CC3000_ClientRef available();
+  CC3000_ClientRef available();
   // Initialize the server and start listening for connections.
   virtual void begin();
   // Write data to all connected clients.  Buffer is a pointer to an array
@@ -104,7 +104,7 @@ public:
 
 private:
   // Store the clients in a simple array.
-  Adafruit_CC3000_Client _clients[MAX_SERVER_CLIENTS];
+  CC3000_Client _clients[MAX_SERVER_CLIENTS];
   // The port this server will listen for connections on.
   uint16_t _port;
   // The id of the listening socket.

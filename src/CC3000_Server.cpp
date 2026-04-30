@@ -1,6 +1,6 @@
 /**************************************************************************/
 /*! 
-  @file     Adafruit_CC3000_Server.cpp
+  @file     CC3000_Server.cpp
   @author   Tony DiCola (tony@tonydicola.com)
   @license  BSD (see license.txt) 
 
@@ -12,7 +12,7 @@
 
 */
 /**************************************************************************/
-#include "Adafruit_CC3000_Server.h"
+#include "CC3000_Server.h"
 
 #include "utility/socket.h"
 
@@ -23,129 +23,129 @@
 
 /**************************************************************************/
 /*
-  Adafruit_CC3000_ClientRef implementation
+  CC3000_ClientRef implementation
 */
 /**************************************************************************/
 
-Adafruit_CC3000_ClientRef::Adafruit_CC3000_ClientRef(Adafruit_CC3000_Client* client)
+CC3000_ClientRef::CC3000_ClientRef(CC3000_Client* client)
   : _client(client) 
 { }
 
 // Return true if the referenced client is connected.  This is provided for
 // compatibility with Ethernet library code.
-Adafruit_CC3000_ClientRef::operator bool() {
+CC3000_ClientRef::operator bool() {
   return connected();
 }
 // Below are wrappers around the public client functions.  These hide the fact that users
 // are dealing with a reference to a client instance and allow code to be written using
 // value semantics like in the Ethernet library.
-int Adafruit_CC3000_ClientRef::connect(IPAddress ip, uint16_t port) {
+int CC3000_ClientRef::connect(IPAddress ip, uint16_t port) {
   HANDLE_NULL(_client, false);
   return _client->connect(ip, port);
 }
 
-int Adafruit_CC3000_ClientRef::connect(const char *host, uint16_t port) {
+int CC3000_ClientRef::connect(const char *host, uint16_t port) {
   HANDLE_NULL(_client, false);
   return _client->connect(host, port);
 }
 
-uint8_t Adafruit_CC3000_ClientRef::connected(void) {
+uint8_t CC3000_ClientRef::connected(void) {
   HANDLE_NULL(_client, false);
   return _client->connected();
 }
 
-size_t Adafruit_CC3000_ClientRef::write(uint8_t c) {
+size_t CC3000_ClientRef::write(uint8_t c) {
   HANDLE_NULL(_client, 0);
   return _client->write(c);
 }
 
-size_t Adafruit_CC3000_ClientRef::fastrprint(const char *str) {
+size_t CC3000_ClientRef::fastrprint(const char *str) {
   HANDLE_NULL(_client, 0);
   return _client->fastrprint(str);
 }
 
-size_t Adafruit_CC3000_ClientRef::fastrprintln(const char *str) {
+size_t CC3000_ClientRef::fastrprintln(const char *str) {
   HANDLE_NULL(_client, 0);
   return _client->fastrprintln(str);
 }
 
-size_t Adafruit_CC3000_ClientRef::fastrprint(char *str) {
+size_t CC3000_ClientRef::fastrprint(char *str) {
   HANDLE_NULL(_client, 0);
   return _client->fastrprint(str);
 }
 
-size_t Adafruit_CC3000_ClientRef::fastrprintln(char *str) {
+size_t CC3000_ClientRef::fastrprintln(char *str) {
   HANDLE_NULL(_client, 0);
   return _client->fastrprintln(str);
 }
 
-size_t Adafruit_CC3000_ClientRef::fastrprint(const __FlashStringHelper *ifsh) {
+size_t CC3000_ClientRef::fastrprint(const __FlashStringHelper *ifsh) {
   HANDLE_NULL(_client, 0);
   return _client->fastrprint(ifsh);
 }
 
-size_t Adafruit_CC3000_ClientRef::fastrprintln(const __FlashStringHelper *ifsh) {
+size_t CC3000_ClientRef::fastrprintln(const __FlashStringHelper *ifsh) {
   HANDLE_NULL(_client, 0);
   return _client->fastrprintln(ifsh);
 }
 
-size_t Adafruit_CC3000_ClientRef::write(const void *buf, uint16_t len, uint32_t flags) {
+size_t CC3000_ClientRef::write(const void *buf, uint16_t len, uint32_t flags) {
   HANDLE_NULL(_client, 0);
   return _client->write(buf, len, flags);
 }
 
-int Adafruit_CC3000_ClientRef::read(void *buf, uint16_t len, uint32_t flags) {
+int CC3000_ClientRef::read(void *buf, uint16_t len, uint32_t flags) {
   HANDLE_NULL(_client, 0);
   return _client->read(buf, len, flags);
 }
 
-int Adafruit_CC3000_ClientRef::read(void) {
+int CC3000_ClientRef::read(void) {
   HANDLE_NULL(_client, 0);
   return _client->read();
 }
 
-int32_t Adafruit_CC3000_ClientRef::close(void) {
+int32_t CC3000_ClientRef::close(void) {
   HANDLE_NULL(_client, 0);
   return _client->close();
 }
 
-int Adafruit_CC3000_ClientRef::available(void) {
+int CC3000_ClientRef::available(void) {
   HANDLE_NULL(_client, 0);
   return _client->available();
 }
 
-int Adafruit_CC3000_ClientRef::read(uint8_t *buf, size_t size) {
+int CC3000_ClientRef::read(uint8_t *buf, size_t size) {
   HANDLE_NULL(_client, 0);
   return _client->read(buf, size);
 }
 
-size_t Adafruit_CC3000_ClientRef::write(const uint8_t *buf, size_t size) {
+size_t CC3000_ClientRef::write(const uint8_t *buf, size_t size) {
   HANDLE_NULL(_client, 0);
   return _client->write(buf, size);
 }
 
-int Adafruit_CC3000_ClientRef::peek() {
+int CC3000_ClientRef::peek() {
   HANDLE_NULL(_client, 0);
   return _client->peek();
 }
 
-void Adafruit_CC3000_ClientRef::flush() {
+void CC3000_ClientRef::flush() {
   if (_client != NULL) _client->flush();
 }
 
-void Adafruit_CC3000_ClientRef::stop() {
+void CC3000_ClientRef::stop() {
   if (_client != NULL) _client->stop();
 }
 
 
 /**************************************************************************/
 /*
-  Adafruit_CC3000_Server implementation
+  CC3000_Server implementation
 */
 /**************************************************************************/
 
 // Construct a TCP server to listen on the specified port.
-Adafruit_CC3000_Server::Adafruit_CC3000_Server(uint16_t port)
+CC3000_Server::CC3000_Server(uint16_t port)
   : _port(port)
   , _listenSocket(-1)
 { }
@@ -154,7 +154,7 @@ Adafruit_CC3000_Server::Adafruit_CC3000_Server(uint16_t port)
 // into a client instance with getClientRef().  Accepts an optional parameter
 // to return a boolean (by reference) indicating if available client is connecting
 // for the first time.
-int8_t Adafruit_CC3000_Server::availableIndex(bool *newClient) {
+int8_t CC3000_Server::availableIndex(bool *newClient) {
   bool newClientCreated = acceptNewConnections();
 
   if (newClient)
@@ -171,24 +171,24 @@ int8_t Adafruit_CC3000_Server::availableIndex(bool *newClient) {
 }
 
 // Given the index of client, returns the instance of that client for reading/writing
-Adafruit_CC3000_ClientRef Adafruit_CC3000_Server::getClientRef(int8_t clientIndex) {
+CC3000_ClientRef CC3000_Server::getClientRef(int8_t clientIndex) {
   if (clientIndex != -1) {
-    return Adafruit_CC3000_ClientRef(&_clients[clientIndex]);
+    return CC3000_ClientRef(&_clients[clientIndex]);
   }
   
   // Couldn't find a client ready to read, so return a client that is not 
   // connected to signal no clients are available for reading (convention
   // used by the Ethernet library).
-  return Adafruit_CC3000_ClientRef(NULL);
+  return CC3000_ClientRef(NULL);
 }
 
 // Return a reference to a client instance which has data available to read.
-Adafruit_CC3000_ClientRef Adafruit_CC3000_Server::available() {
+CC3000_ClientRef CC3000_Server::available() {
   return getClientRef(availableIndex(NULL));
 }
 
 // Initialize the server and start listening for connections.
-void Adafruit_CC3000_Server::begin() {
+void CC3000_Server::begin() {
   // Set the CC3000 inactivity timeout to 0 (never timeout).  This will ensure 
   // the CC3000 does not close the listening socket when it's idle for more than 
   // 60 seconds (the default timeout).  See more information from:
@@ -239,7 +239,7 @@ void Adafruit_CC3000_Server::begin() {
 // Write data to all connected clients.  Buffer is a pointer to an array
 // of bytes, and size specifies how many bytes to write from the buffer.
 // Return the sum of bytes written to all clients.
-size_t Adafruit_CC3000_Server::write(const uint8_t *buffer, size_t size) {
+size_t CC3000_Server::write(const uint8_t *buffer, size_t size) {
   size_t written = 0;
   for (int i = 0; i < MAX_SERVER_CLIENTS; ++i) {
     if (_clients[i].connected()) {
@@ -251,12 +251,12 @@ size_t Adafruit_CC3000_Server::write(const uint8_t *buffer, size_t size) {
 
 // Write a byte value to all connected clients.
 // Return the sum of bytes written to all clients.
-size_t Adafruit_CC3000_Server::write(uint8_t value) {
+size_t CC3000_Server::write(uint8_t value) {
   return write(&value, 1);
 }
 
 // Accept new connections and update the connected clients.
-bool Adafruit_CC3000_Server::acceptNewConnections() {
+bool CC3000_Server::acceptNewConnections() {
   bool newClientCreated = false;
   // For any unconnected client, see if new connections are pending and accept
   // them as a new client.
@@ -269,7 +269,7 @@ bool Adafruit_CC3000_Server::acceptNewConnections() {
       cc3k_int_poll();
       int soc = accept(_listenSocket, NULL, NULL);
       if (soc > -1) {
-        _clients[i] = Adafruit_CC3000_Client(soc);
+        _clients[i] = CC3000_Client(soc);
         newClientCreated = true;
       }
       // else either there were no sockets to accept or an error occured.

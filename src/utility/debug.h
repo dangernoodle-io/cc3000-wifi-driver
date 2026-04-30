@@ -1,6 +1,6 @@
 /**************************************************************************/
 /*!
-  @file     Adafruit_CC3000.cpp
+  @file     CC3000.cpp
   @author   KTOWN (Kevin Townsend for Adafruit Industries)
 	@license  BSD (see license.txt)
 
