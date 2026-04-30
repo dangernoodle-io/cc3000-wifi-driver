@@ -198,6 +198,11 @@ class CC3000 {
 
   private:
     bool _initialised;
+    // Temporary storage for ping callback (active only during ping())
+    static CC3000* _current_instance;
+    static netapp_pingreport_args_t* _current_ping_report;
+    static uint8_t* _current_ping_count;
+    friend void CC3000_UsynchCallback(long lEventType, char * data, unsigned char length);
 
 };
 

@@ -96,8 +96,10 @@ static const uint8_t dreqinttable[] = {
 
 /***********************/
 
-uint8_t pingReportnum;
-netapp_pingreport_args_t pingReport;
+// Static member initializations (declared in CC3000 class header)
+CC3000* CC3000::_current_instance = NULL;
+netapp_pingreport_args_t* CC3000::_current_ping_report = NULL;
+uint8_t* CC3000::_current_ping_count = NULL;
 
 #define CC3000_SUCCESS                        (0)
 #define CHECK_SUCCESS(func,Notify,errorCode)  {if ((func) != CC3000_SUCCESS) { CHECK_PRINTER CC3KPrinter->println(F(Notify)); return errorCode;}}
@@ -1023,8 +1025,8 @@ void CC3000_UsynchCallback(long lEventType, char * data, unsigned char length)
   if (lEventType == HCI_EVNT_WLAN_ASYNC_PING_REPORT)
   {
     //PRINT_F("CC3000: Ping report\n\r");
-    pingReportnum++;
-    memcpy(&pingReport, data, length);
+    if (CC3000::_current_ping_count) (*CC3000::_current_ping_count)++;
+    if (CC3000::_current_ping_report) memcpy(CC3000::_current_ping_report, data, length);
   }
 
   if (lEventType == HCI_EVNT_BSD_TCP_CLOSE_WAIT) {
@@ -1178,16 +1180,27 @@ uint16_t CC3000::ping(uint32_t ip, uint8_t attempts, uint16_t timeout, uint8_t s
 
   uint32_t revIP = (ip >> 24) | ((ip >> 8) & 0xFF00) | ((ip & 0xFF00) << 8) | (ip << 24);
 
-  pingReportnum = 0;
+  // Stack-allocated ping report buffers (saves 32B RAM when ping unused)
+  uint8_t pingReportnum = 0;
+  netapp_pingreport_args_t pingReport;
   pingReport.packets_received = 0;
+
+  // Register stack buffers with callback (static members, no global pointers)
+  _current_ping_count = &pingReportnum;
+  _current_ping_report = &pingReport;
 
   //if (CC3KPrinter != 0) {
   //  CC3KPrinter->print(F("Pinging ")); printIPdots(revIP); CC3KPrinter->print(" ");
   //  CC3KPrinter->print(attempts); CC3KPrinter->println(F(" times"));
   //}
-  
+
   netapp_ping_send(&revIP, attempts, size, timeout);
   delay(timeout*attempts*2);
+
+  // Clear callback pointers
+  _current_ping_count = NULL;
+  _current_ping_report = NULL;
+
   //if (CC3KPrinter != 0) CC3KPrinter->println(F("Req report"));
   //netapp_ping_report();
   //if (CC3KPrinter != 0) { CC3KPrinter->print(F("Reports: ")); CC3KPrinter->println(pingReportnum); }
