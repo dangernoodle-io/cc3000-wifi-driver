@@ -55,6 +55,8 @@ int getFreeRam(void)
 } 
 #endif
 
+#if CC3K_DEBUG
+
 void displayFreeRam(void)
 {
   if (CC3KPrinter == 0) {
@@ -123,3 +125,15 @@ void DEBUGPRINT(const prog_char *fstr)
   while((c = pgm_read_byte(fstr++)))
     uart_putchar(c);
 }
+
+#else
+
+void displayFreeRam(void) {}
+void uart_putchar(char c) {}
+void printDec(uint8_t h) {}
+void printHex(uint8_t h) {}
+void printHex16(uint16_t h) {}
+void printDec16(uint16_t h) {}
+void DEBUGPRINT(const prog_char *fstr) {}
+
+#endif

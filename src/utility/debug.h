@@ -23,6 +23,7 @@
 
 #include <Arduino.h>
 #include "pgmspace_compat.h"
+#include "../cc3000_config.h"
 
 #define GCC_VERSION (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
 
@@ -46,18 +47,18 @@ void printDec16(uint16_t h);
 
 #define PRINT_F(__s)         DEBUGPRINT(FLASHIFY(__s))
 
-#if (DEBUG_MODE != 0)
+#if CC3K_DEBUG
 #define DEBUGPRINT_F(__s)         DEBUGPRINT(FLASHIFY(__s))
 #define DEBUGPRINT_DEC(x)  printDec(x)
 #define DEBUGPRINT_DEC16(x)  printDec16(x)
 #define DEBUGPRINT_HEX(x)  printHex(x)
 #define DEBUGPRINT_HEX16(x)  printHex16(x)
 #else
-#define DEBUGPRINT_F(__s)         /* do nothing! */
-#define DEBUGPRINT_DEC(x)
-#define DEBUGPRINT_DEC16(x)
-#define DEBUGPRINT_HEX(x)
-#define DEBUGPRINT_HEX16(x)
+#define DEBUGPRINT_F(__s)         do {} while (0)
+#define DEBUGPRINT_DEC(x)         do {} while (0)
+#define DEBUGPRINT_DEC16(x)       do {} while (0)
+#define DEBUGPRINT_HEX(x)         do {} while (0)
+#define DEBUGPRINT_HEX16(x)       do {} while (0)
 #endif
 
 extern Print* CC3KPrinter;
