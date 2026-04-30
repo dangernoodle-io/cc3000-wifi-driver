@@ -8,4 +8,5 @@ build/
 .idea/
 .pio/
 .cache/
+.code-graph/
 platformio_local.ini
