@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        fqbn:
+          - arduino:avr:uno
+          - arduino:renesas_uno:minima
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: arduino/setup-arduino-cli@v1
+
+      - name: Install cores
+        run: |
+          arduino-cli core install arduino:avr
+          arduino-cli core install arduino:renesas_uno
+
+      - name: Compile vendored examples
+        run: |
+          arduino-cli compile --fqbn ${{ matrix.fqbn }} examples/buildtest
