@@ -9,19 +9,19 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        fqbn:
-          - arduino:avr:uno
-          - arduino:renesas_uno:minima
+        board:
+          - uno
+          - uno_r4_minima
     steps:
       - uses: actions/checkout@v4
 
-      - uses: arduino/setup-arduino-cli@v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
 
-      - name: Install cores
-        run: |
-          arduino-cli core install arduino:avr
-          arduino-cli core install arduino:renesas_uno
+      - name: Install PlatformIO
+        run: pip install platformio
 
-      - name: Compile vendored examples
+      - name: Compile vendored buildtest example
         run: |
-          arduino-cli compile --fqbn ${{ matrix.fqbn }} examples/buildtest
+          pio ci --board=${{ matrix.board }} --lib=. examples/buildtest/buildtest.ino
