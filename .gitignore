@@ -10,3 +10,4 @@ build/
 .cache/
 .code-graph/
 platformio_local.ini
+examples/smoke/include/secrets.h
