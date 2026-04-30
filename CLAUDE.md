@@ -11,13 +11,15 @@ CC3000 WiFi driver for modern Arduino boards. Vendored from Adafruit_CC3000_Libr
 
 ## Local development
 
-### Apple Silicon
+### Local overrides
 
-PlatformIO's `atmelavr` and `renesas-ra` toolchains are x86_64 only. Install Rosetta 2 once:
+PlatformIO's `atmelavr` and `renesas-ra` toolchains are x86_64 only. On Apple Silicon, configure native arm64 toolchains using `platformio_local.ini`:
 
-    softwareupdate --install-rosetta --agree-to-license
+1. Copy `examples/smoke/platformio_local.ini.example` to `examples/smoke/platformio_local.ini`
+2. Replace `YOUR_USERNAME` with your macOS login (e.g., `/Users/jae/.local/pio-avr`)
+3. Ensure symlinks exist (these are typically set up via breadboard's bootstrap flow)
 
-Without it, `make smoke-*` fails with `bad CPU type in executable`.
+Without this, builds fail with `bad CPU type in executable`.
 
 ### Build
 
