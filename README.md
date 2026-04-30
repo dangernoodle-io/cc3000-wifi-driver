@@ -1,4 +1,4 @@
-# cc3000-driver
+# cc3000-wifi-driver
 
 Early development. Vendored from Adafruit_CC3000_Library; rewrite in progress.
 

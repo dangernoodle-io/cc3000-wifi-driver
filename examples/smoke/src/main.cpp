@@ -20,7 +20,7 @@ static void printIPdotted(uint32_t ip) {
 void setup() {
     Serial.begin(115200);
     while (!Serial) {}
-    Serial.println(F("\n--- cc3000-driver smoke ---"));
+    Serial.println(F("\n--- cc3000-wifi-driver smoke ---"));
 
     if (!cc3000.begin()) {
         Serial.println(F("FAIL: begin"));
