@@ -24,7 +24,7 @@ Without this, builds fail with `bad CPU type in executable`.
 ### Build
 
     make smoke-uno              # AVR build
-    make smoke-uno_r4_minima    # Cortex-M build (currently fails — phase 1 work)
+    make smoke-r4-minima        # Cortex-M build (currently fails — phase 1 work)
     make smoke                  # both
     make check                  # cppcheck
 

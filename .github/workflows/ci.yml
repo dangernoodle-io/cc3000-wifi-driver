@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        example: [uno, uno_r4_minima]
+        example: [uno, r4-minima]
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-python@v6
