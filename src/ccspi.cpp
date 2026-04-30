@@ -101,7 +101,7 @@ uint8_t ccspi_mySPICTRL, ccspi_oldSPICTRL;
 #define SpiConfigPop()			do { SPCR = ccspi_oldSPICTRL; } while (0)
 #else
 // TODO: ARM (Due, Teensy 3.0, etc)
-// #error platform not yet supported by Adafruit_CC3000
+// #error platform not yet supported by CC3000
 #define SpiConfigStoreOld()		do {  } while (0)
 #define SpiConfigStoreMy()		do {  } while (0)
 #define SpiConfigPush()			do {  } while (0)
@@ -131,7 +131,7 @@ uint8_t ccspi_mySPICTRL, ccspi_oldSPICTRL;
 #endif
 
 
-/* smartconfig flags (defined in Adafruit_CC3000.cpp) */
+/* smartconfig flags (defined in CC3000.cpp) */
 // extern unsigned long ulSmartConfigFinished, ulCC3000DHCP;
 
 typedef struct

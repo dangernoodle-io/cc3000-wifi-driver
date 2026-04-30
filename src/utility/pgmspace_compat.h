@@ -1,6 +1,6 @@
 #pragma once
 
-// Portability shim for Adafruit_CC3000 vendored source.
+// Portability shim for CC3000 vendored source.
 // On AVR, defers to <avr/pgmspace.h>. Elsewhere (Cortex-M, etc.) provides
 // no-op fallbacks so the same code paths build unchanged.
 

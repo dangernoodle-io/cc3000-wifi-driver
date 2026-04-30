@@ -1,6 +1,6 @@
 /**************************************************************************/
 /*! 
-  @file     Adafruit_CC3000.h
+  @file     CC3000.h
   @author   KTOWN (Kevin Townsend for Adafruit Industries)
   @license  BSD (see license.txt) 
 
@@ -17,8 +17,8 @@
 */
 /**************************************************************************/
 
-#ifndef ADAFRUIT_CC3000_H
-#define ADAFRUIT_CC3000_H
+#ifndef CC3000_H
+#define CC3000_H
 
 #if ARDUINO >= 100
  #include "Arduino.h"
@@ -83,17 +83,17 @@ typedef enum
   STATUS_CONNECTED    = 3
 } status_t;
 
-class Adafruit_CC3000;
+class CC3000;
 
-class Adafruit_CC3000_Client : public Client {
+class CC3000_Client : public Client {
  public:
-  Adafruit_CC3000_Client(int32_t s);
-  Adafruit_CC3000_Client(void);
-  Adafruit_CC3000_Client(const Adafruit_CC3000_Client& copy);
-  void operator=(const Adafruit_CC3000_Client& other);
+  CC3000_Client(int32_t s);
+  CC3000_Client(void);
+  CC3000_Client(const CC3000_Client& copy);
+  void operator=(const CC3000_Client& other);
   
   // NOTE: If public functions below are added/modified/removed please make sure to update the 
-  // Adafruit_CC3000_ClientRef class to match!
+  // CC3000_ClientRef class to match!
 
   int connect(IPAddress ip, uint16_t port);
   int connect(const char *host, uint16_t port);
@@ -133,11 +133,11 @@ class Adafruit_CC3000_Client : public Client {
 // A forward reference in the server header won't cut it because the server needs to contain
 // instances of the client.  The client definition above can be pulled into a separate
 // header in a later change to make this cleaner.
-#include "Adafruit_CC3000_Server.h"
+#include "CC3000_Server.h"
 
-class Adafruit_CC3000 {
+class CC3000 {
   public:
-    Adafruit_CC3000(uint8_t csPin, uint8_t irqPin, uint8_t vbatPin, uint8_t spispeed = SPI_CLOCK_DIVIDER, Print* cc3kPrinter = CC3K_DEFAULT_PRINTER);
+    CC3000(uint8_t csPin, uint8_t irqPin, uint8_t vbatPin, uint8_t spispeed = SPI_CLOCK_DIVIDER, Print* cc3kPrinter = CC3K_DEFAULT_PRINTER);
     bool     begin(uint8_t patchReq = 0, bool useSmartConfigData = false, const char *_deviceName = NULL);
     void     reboot(uint8_t patchReq = 0);
     void     stop(void);
@@ -162,8 +162,8 @@ class Adafruit_CC3000 {
 
     bool     checkSmartConfigFinished(void);
 
-    Adafruit_CC3000_Client connectTCP(uint32_t destIP, uint16_t destPort);
-    Adafruit_CC3000_Client connectUDP(uint32_t destIP, uint16_t destPort);
+    CC3000_Client connectTCP(uint32_t destIP, uint16_t destPort);
+    CC3000_Client connectUDP(uint32_t destIP, uint16_t destPort);
      
     #ifndef CC3000_TINY_DRIVER
     bool     getFirmwareVersion(uint8_t *major, uint8_t *minor);
