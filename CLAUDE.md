@@ -1,4 +1,4 @@
-# cc3000-driver
+# cc3000-wifi-driver
 
 CC3000 WiFi driver for modern Arduino boards. Vendored from Adafruit_CC3000_Library; clean rewrite in progress.
 
