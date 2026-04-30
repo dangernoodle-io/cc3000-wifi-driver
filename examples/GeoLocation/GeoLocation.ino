@@ -33,7 +33,7 @@ if making a mobile network-hopping thing, so as not to overwhelm the
 kindly-provided free geolocation service.
 */
 
-#include <Adafruit_CC3000.h>
+#include <CC3000.h>
 #include <ccspi.h>
 #include <SPI.h>
 #include <string.h>
@@ -46,7 +46,7 @@ kindly-provided free geolocation service.
 #define ADAFRUIT_CC3000_CS    10
 // Use hardware SPI for the remaining pins
 // On an UNO, SCK = 13, MISO = 12, and MOSI = 11
-Adafruit_CC3000 cc3000 = Adafruit_CC3000(ADAFRUIT_CC3000_CS,
+CC3000 cc3000 = CC3000(ADAFRUIT_CC3000_CS,
   ADAFRUIT_CC3000_IRQ, ADAFRUIT_CC3000_VBAT,
   SPI_CLOCK_DIVIDER); // you can change this clock speed
 
@@ -55,7 +55,7 @@ Adafruit_CC3000 cc3000 = Adafruit_CC3000(ADAFRUIT_CC3000_CS,
 // Security can be WLAN_SEC_UNSEC, WLAN_SEC_WEP, WLAN_SEC_WPA or WLAN_SEC_WPA2
 #define WLAN_SECURITY   WLAN_SEC_WPA2
 
-Adafruit_CC3000_Client client;
+CC3000_Client client;
 
 const unsigned long
   dhcpTimeout     = 60L * 1000L, // Max time to wait for address from DHCP

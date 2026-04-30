@@ -15,7 +15,7 @@
   
   This sketch requires the Adafruit CC3000 library.  You can
   download the library from:
-    https://github.com/adafruit/Adafruit_CC3000_Library
+    https://github.com/adafruit/CC3000_Library
   
   For information on installing libraries in the Arduino IDE
   see this page:
@@ -65,7 +65,7 @@
   Written by Limor Fried & Kevin Townsend for Adafruit Industries.  
   BSD license, all text above must be included in any redistribution      
  ****************************************************/
-#include <Adafruit_CC3000.h>
+#include <CC3000.h>
 #include <SPI.h>
 #include "utility/debug.h"
 #include "utility/socket.h"
@@ -77,7 +77,7 @@
 #define ADAFRUIT_CC3000_CS    10
 // Use hardware SPI for the remaining pins
 // On an UNO, SCK = 13, MISO = 12, and MOSI = 11
-Adafruit_CC3000 cc3000 = Adafruit_CC3000(ADAFRUIT_CC3000_CS, ADAFRUIT_CC3000_IRQ, ADAFRUIT_CC3000_VBAT,
+CC3000 cc3000 = CC3000(ADAFRUIT_CC3000_CS, ADAFRUIT_CC3000_IRQ, ADAFRUIT_CC3000_VBAT,
                                          SPI_CLOCK_DIVIDER); // you can change this clock speed
 
 #define WLAN_SSID       "myNetwork"           // cannot be longer than 32 characters!
@@ -87,7 +87,7 @@ Adafruit_CC3000 cc3000 = Adafruit_CC3000(ADAFRUIT_CC3000_CS, ADAFRUIT_CC3000_IRQ
 
 #define LISTEN_PORT           23    // What TCP port to listen on for connections.
 
-Adafruit_CC3000_Server chatServer(LISTEN_PORT);
+CC3000_Server chatServer(LISTEN_PORT);
 
 void setup(void)
 {
@@ -141,7 +141,7 @@ void setup(void)
 void loop(void)
 {
   // Try to get a client which is connected.
-  Adafruit_CC3000_ClientRef client = chatServer.available();
+  CC3000_ClientRef client = chatServer.available();
   if (client) {
      // Check if there is data available to read.
      if (client.available() > 0) {

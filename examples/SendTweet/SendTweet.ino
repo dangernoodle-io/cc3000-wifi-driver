@@ -78,7 +78,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <Adafruit_CC3000.h>
+#include <CC3000.h>
 #include <ccspi.h>
 #include <SPI.h>
 #include <sha1.h>
@@ -99,7 +99,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #define ADAFRUIT_CC3000_CS   10 // any two pins
 // Hardware SPI required for remaining pins.
 // On an UNO, SCK = 13, MISO = 12, and MOSI = 11
-Adafruit_CC3000 cc3000 = Adafruit_CC3000(
+CC3000 cc3000 = CC3000(
   ADAFRUIT_CC3000_CS, ADAFRUIT_CC3000_IRQ, ADAFRUIT_CC3000_VBAT,
   SPI_CLOCK_DIVIDER);
 
@@ -127,7 +127,7 @@ const unsigned long
   responseTimeout = 15L * 1000L; // Max time to wait for data from server
 unsigned long
   currentTime = 0L;
-Adafruit_CC3000_Client
+CC3000_Client
   client;        // For WiFi connections
 
 // Similar to F(), but for PROGMEM string pointers rather than literals

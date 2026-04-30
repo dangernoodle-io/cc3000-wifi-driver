@@ -31,7 +31,7 @@
 //     example.  Make sure to save your MAC address before upgrading the firmware
 //     if you'd like to keep it the same after
 
-#include <Adafruit_CC3000.h>
+#include <CC3000.h>
 #include <ccspi.h>
 #include <SPI.h>
 #include <string.h>
@@ -49,7 +49,7 @@
 #define ADAFRUIT_CC3000_CS    10
 #define ADAFRUIT_CC3000_VBAT  5
 
-Adafruit_CC3000 cc3000 = Adafruit_CC3000(ADAFRUIT_CC3000_CS, ADAFRUIT_CC3000_IRQ, ADAFRUIT_CC3000_VBAT);
+CC3000 cc3000 = CC3000(ADAFRUIT_CC3000_CS, ADAFRUIT_CC3000_IRQ, ADAFRUIT_CC3000_VBAT);
 
 /**************************************************************************/
 /*!
