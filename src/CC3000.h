@@ -160,7 +160,11 @@ class CC3000 {
     bool     checkDHCP(void);
     bool     getIPAddress(uint32_t *retip, uint32_t *netmask, uint32_t *gateway, uint32_t *dhcpserv, uint32_t *dnsserv);
 
+    #if CC3K_SMARTCONFIG
     bool     checkSmartConfigFinished(void);
+    #else
+    inline bool checkSmartConfigFinished(void) { return false; }
+    #endif
 
     CC3000_Client connectTCP(uint32_t destIP, uint16_t destPort);
     CC3000_Client connectUDP(uint32_t destIP, uint16_t destPort);
@@ -173,7 +177,11 @@ class CC3000 {
     uint8_t  getNextSSID(uint8_t *rssi, uint8_t *secMode, char *ssidname);
 
     bool     listSSIDResults(void);
+    #if CC3K_SMARTCONFIG
     bool     startSmartConfig(const char *_deviceName = NULL, const char *smartConfigKey = NULL, uint32_t = SMART_CONFIG_TIMEOUT);
+    #else
+    inline bool startSmartConfig(const char *_deviceName = NULL, const char *smartConfigKey = NULL, uint32_t = SMART_CONFIG_TIMEOUT) { return false; }
+    #endif
     bool     getIPConfig(tNetappIpconfigRetArgs *ipConfig);
 
 

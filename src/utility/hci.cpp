@@ -48,6 +48,7 @@
 //
 //*****************************************************************************
 
+#include "../cc3000_config.h"
 #include "cc3000_common.h"
 #include "hci.h"
 // Adafruit CC3k Host Driver Difference
@@ -170,8 +171,9 @@ void hci_data_command_send(UINT16 usOpcode, UINT8 *pucBuff, UINT8 ucArgsLength,U
 //!  @brief               Prepeare HCI header and initiate an HCI patch write operation
 //
 //*****************************************************************************
+#if CC3K_PATCH_PROGRAMMING
 void hci_patch_send(UINT8 ucOpcode, UINT8 *pucBuff, CHAR *patch, UINT16 usDataLength)
-{ 
+{
 	UINT8 *data_ptr = (pucBuff + SPI_HEADER_SIZE);
 	UINT16 usTransLength;
 	UINT8 *stream = (pucBuff + SPI_HEADER_SIZE);
@@ -230,6 +232,7 @@ void hci_patch_send(UINT8 ucOpcode, UINT8 *pucBuff, CHAR *patch, UINT16 usDataLe
 		}
 	}
 }
+#endif
 
 //*****************************************************************************
 //

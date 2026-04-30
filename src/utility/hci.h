@@ -310,13 +310,14 @@ extern INT32 hci_data_send(UINT8 ucOpcode,
 extern void hci_data_command_send(UINT16 usOpcode, UINT8 *pucBuff,
                      UINT8 ucArgsLength, UINT16 ucDataLength);
 
+#if CC3K_PATCH_PROGRAMMING
 //*****************************************************************************
 //
 //!  hci_patch_send
 //!
 //!  @param  usOpcode      command operation code
 //!  @param  pucBuff       pointer to the command's arguments buffer
-//!  @param  patch         pointer to patch content buffer 
+//!  @param  patch         pointer to patch content buffer
 //!  @param  usDataLength  data length
 //!
 //!  @return              none
@@ -325,6 +326,7 @@ extern void hci_data_command_send(UINT16 usOpcode, UINT8 *pucBuff,
 //
 //*****************************************************************************
 extern void hci_patch_send(UINT8 ucOpcode, UINT8 *pucBuff, CHAR *patch, UINT16 usDataLength);
+#endif
 
 
 
