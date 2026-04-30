@@ -33,6 +33,10 @@
 #define CC3K_SMARTCONFIG 0
 #endif
 
+#ifndef CC3K_PATCH_PROGRAMMING
+#define CC3K_PATCH_PROGRAMMING 0
+#endif
+
 #ifndef CC3K_MAX_SOCKETS
 #define CC3K_MAX_SOCKETS 4
 #endif

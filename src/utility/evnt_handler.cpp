@@ -143,6 +143,7 @@ static void update_socket_active_status(CHAR *resp_params);
 
 //*****************************************************************************
 //
+#if CC3K_PATCH_PROGRAMMING
 //!  hci_unsol_handle_patch_request
 //!
 //!  @param  event_hdr  event header
@@ -219,7 +220,7 @@ void hci_unsol_handle_patch_request(CHAR *event_hdr)
 		break;
 	}
 }
-
+#endif
 
 
 //*****************************************************************************
@@ -492,13 +493,15 @@ UINT8 * hci_event_handler(void *pRetParams, UINT8 *from, UINT8 *fromlen)
 
 			SpiResumeSpi();
 
-			// Since we are going to TX - we need to handle this event after the 
+			// Since we are going to TX - we need to handle this event after the
 			// ResumeSPi since we need interrupts
+			#if CC3K_PATCH_PROGRAMMING
 			if ((*pucReceivedData == HCI_TYPE_EVNT) &&
 				(usReceivedEventOpcode == HCI_EVNT_PATCHES_REQ))
 			{
 				hci_unsol_handle_patch_request((CHAR *)pucReceivedData);
 			}
+			#endif
 
 			if ((tSLInformation.usRxEventOpcode == 0) && (tSLInformation.usRxDataPending == 0))
 			{

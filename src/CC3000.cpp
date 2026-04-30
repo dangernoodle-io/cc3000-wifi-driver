@@ -116,7 +116,9 @@ boolean closed_sockets[MAX_SOCKETS] = {false, false, false, false};
 
 class CC3000BitSet {
 public:
+  #if CC3K_SMARTCONFIG
   static const byte IsSmartConfigFinished = 0x01;
+  #endif
   static const byte IsConnected = 0x02;
   static const byte HasDHCP = 0x04;
   static const byte OkToShutDown = 0x08;
@@ -282,6 +284,7 @@ bool CC3000::begin(uint8_t patchReq, bool useSmartConfigData, const char *_devic
   DEBUGPRINT_F("ioctl\n\r");
   // Check if we should erase previous stored connection details
   // (most likely written with data from the SmartConfig app)
+  #if CC3K_SMARTCONFIG
   if (!useSmartConfigData)
   {
     // Manual connection only (no auto, profiles, etc.)
@@ -293,13 +296,19 @@ bool CC3000::begin(uint8_t patchReq, bool useSmartConfigData, const char *_devic
   {
     // Auto Connect - the C3000 device tries to connect to any AP it detects during scanning:
     // wlan_ioctl_set_connection_policy(1, 0, 0)
-    
+
     // Fast Connect - the CC3000 device tries to reconnect to the last AP connected to:
     // wlan_ioctl_set_connection_policy(0, 1, 0)
 
     // Use Profiles - the CC3000 device tries to connect to an AP from profiles:
     wlan_ioctl_set_connection_policy(0, 0, 1);
   }
+  #else
+  // Manual connection only (no auto, profiles, etc.)
+  wlan_ioctl_set_connection_policy(0, 0, 0);
+  // Delete previous profiles from memory
+  wlan_ioctl_del_profile(255);
+  #endif
 
   CHECK_SUCCESS(
     wlan_set_event_mask(HCI_EVNT_WLAN_UNSOL_INIT        |
@@ -312,6 +321,7 @@ bool CC3000::begin(uint8_t patchReq, bool useSmartConfigData, const char *_devic
   _initialised = true;
 
   // Wait for re-connection if we're using SmartConfig data
+  #if CC3K_SMARTCONFIG
   if (useSmartConfigData)
   {
     // Wait for a connection
@@ -329,13 +339,14 @@ bool CC3000::begin(uint8_t patchReq, bool useSmartConfigData, const char *_devic
       timeout += 10;
       delay(10);
     }
-    
-    delay(1000);  
+
+    delay(1000);
     if (cc3000Bitset.test(CC3000BitSet::HasDHCP))
     {
       mdnsAdvertiser(1, (char *) _deviceName, strlen(_deviceName));
     }
   }
+  #endif
     
   return true;
 }
@@ -806,6 +817,7 @@ uint8_t CC3000::getNextSSID(uint8_t *rssi, uint8_t *secMode, char *ssidname) {
 */
 /**************************************************************************/
 #ifndef CC3000_TINY_DRIVER
+#if CC3K_SMARTCONFIG
 bool CC3000::startSmartConfig(const char *_deviceName, const char *smartConfigKey, uint32_t timeout)
 {
   bool enableAES = smartConfigKey != NULL;
@@ -931,6 +943,7 @@ bool CC3000::startSmartConfig(const char *_deviceName, const char *smartConfigKe
   
   return true;
 }
+#endif
 
 #endif
 
@@ -980,10 +993,12 @@ bool CC3000::connectOpen(const char *ssid)
 //*****************************************************************************
 void CC3000_UsynchCallback(long lEventType, char * data, unsigned char length)
 {
+  #if CC3K_SMARTCONFIG
   if (lEventType == HCI_EVNT_WLAN_ASYNC_SIMPLE_CONFIG_DONE)
   {
     cc3000Bitset.set(CC3000BitSet::IsSmartConfigFinished);
   }
+  #endif
 
   if (lEventType == HCI_EVNT_WLAN_UNSOL_CONNECT)
   {
@@ -1249,10 +1264,12 @@ bool CC3000::checkDHCP(void)
     @returns  True if smart config is finished
 */
 /**************************************************************************/
+#if CC3K_SMARTCONFIG
 bool CC3000::checkSmartConfigFinished(void)
 {
   return cc3000Bitset.test(CC3000BitSet::IsSmartConfigFinished);
 }
+#endif
 
 #ifndef CC3000_TINY_DRIVER
 /**************************************************************************/

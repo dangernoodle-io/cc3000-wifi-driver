@@ -51,6 +51,7 @@ products from Adafruit!
 #ifndef __WLAN_H__
 #define	__WLAN_H__
 
+#include "../cc3000_config.h"
 #include "cc3000_common.h"
 
 //*****************************************************************************
@@ -451,18 +452,19 @@ extern INT32 wlan_ioctl_set_scan_params(UINT32 uiEnable, UINT32
 											 UINT32 *aiIntervalList);
 
                                            
+#if CC3K_SMARTCONFIG
 //*****************************************************************************
 //
 //!  wlan_smart_config_start
 //!
 //!  @param    algoEncryptedFlag indicates whether the information is encrypted
 //!
-//!  @return   On success, zero is returned. On error, -1 is returned        
+//!  @return   On success, zero is returned. On error, -1 is returned
 //!
-//!  @brief   Start to acquire device profile. The device acquire its own 
+//!  @brief   Start to acquire device profile. The device acquire its own
 //!           profile, if profile message is found. The acquired AP information
 //!           is stored in CC3000 EEPROM only in case AES128 encryption is used.
-//!           In case AES128 encryption is not used, a profile is created by 
+//!           In case AES128 encryption is not used, a profile is created by
 //!           CC3000 internally.
 //!
 //!  @Note    An asynchronous event - Smart Config Done will be generated as soon
@@ -470,7 +472,7 @@ extern INT32 wlan_ioctl_set_scan_params(UINT32 uiEnable, UINT32
 //!
 //!  @sa      wlan_smart_config_set_prefix , wlan_smart_config_stop
 //
-//*****************************************************************************                                        
+//*****************************************************************************
 extern INT32 wlan_smart_config_start(UINT32 algoEncryptedFlag);
 
 
@@ -480,9 +482,9 @@ extern INT32 wlan_smart_config_start(UINT32 algoEncryptedFlag);
 //!
 //!  @param    algoEncryptedFlag indicates whether the information is encrypted
 //!
-//!  @return   On success, zero is returned. On error, -1 is returned        
+//!  @return   On success, zero is returned. On error, -1 is returned
 //!
-//!  @brief   Stop the acquire profile procedure 
+//!  @brief   Stop the acquire profile procedure
 //!
 //!  @sa      wlan_smart_config_start , wlan_smart_config_set_prefix
 //
@@ -493,11 +495,11 @@ extern INT32 wlan_smart_config_stop(void);
 //
 //!  wlan_smart_config_set_prefix
 //!
-//!  @param   newPrefix  3 bytes identify the SSID prefix for the Smart Config. 
+//!  @param   newPrefix  3 bytes identify the SSID prefix for the Smart Config.
 //!
-//!  @return   On success, zero is returned. On error, -1 is returned        
+//!  @return   On success, zero is returned. On error, -1 is returned
 //!
-//!  @brief   Configure station ssid prefix. The prefix is used internally 
+//!  @brief   Configure station ssid prefix. The prefix is used internally
 //!           in CC3000. It should always be TTT.
 //!
 //!  @Note    The prefix is stored in CC3000 NVMEM
@@ -511,17 +513,18 @@ extern INT32 wlan_smart_config_set_prefix(CHAR* cNewPrefix);
 //
 //!  wlan_smart_config_process
 //!
-//!  @param   none 
+//!  @param   none
 //!
-//!  @return   On success, zero is returned. On error, -1 is returned        
+//!  @return   On success, zero is returned. On error, -1 is returned
 //!
-//!  @brief   process the acquired data and store it as a profile. The acquired 
+//!  @brief   process the acquired data and store it as a profile. The acquired
 //!           AP information is stored in CC3000 EEPROM encrypted.
 //!           The encrypted data is decrypted and stored as a profile.
 //!           behavior is as defined by connection policy.
 //
 //*****************************************************************************
 extern INT32 wlan_smart_config_process(void);
+#endif
 
 //*****************************************************************************
 //
