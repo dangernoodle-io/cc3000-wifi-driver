@@ -1,27 +1,42 @@
-name: CI
-
+name: build
 on:
   push:
+    branches: [main]
   pull_request:
-
+    branches: [main]
 jobs:
-  build:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - run: sudo apt-get update && sudo apt-get install -y cppcheck
+      - run: make check
+  smoke:
+    needs: lint
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        board:
-          - uno
-          - uno_r4_minima
+        example: [uno, uno_r4_minima]
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
         with:
           python-version: '3.11'
-
-      - name: Install PlatformIO
-        run: pip install platformio
-
-      - name: Compile vendored buildtest example
-        run: |
-          pio ci --board=${{ matrix.board }} --lib=. examples/buildtest/buildtest.ino
+      - name: Cache PlatformIO
+        uses: actions/cache@v5
+        with:
+          path: ~/.platformio
+          key: ${{ runner.os }}-pio-${{ hashFiles('**/platformio.ini') }}
+          restore-keys: ${{ runner.os }}-pio-
+      - run: pip install platformio
+      - run: make smoke-${{ matrix.example }}
+  summary:
+    if: always()
+    needs: [lint, smoke]
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          if [ "${{ needs.lint.result }}" != "success" ] || [ "${{ needs.smoke.result }}" != "success" ]; then
+            echo "lint=${{ needs.lint.result }} smoke=${{ needs.smoke.result }}"
+            exit 1
+          fi
