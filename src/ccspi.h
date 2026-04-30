@@ -64,10 +64,7 @@
 typedef void (*gcSpiHandleRx)(void *p);
 typedef void (*gcSpiHandleTx)(void);
 
-extern char spi_buffer[];
-
-// wlan_tx_buffer is a macro alias to spi_buffer (shared half-duplex TX/RX buffer)
-#define wlan_tx_buffer ((unsigned char *)spi_buffer)
+extern unsigned char wlan_tx_buffer[];
 
 //*****************************************************************************
 //
