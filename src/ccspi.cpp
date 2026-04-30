@@ -442,7 +442,9 @@ void SpiReadDataSynchronous(unsigned char *data, unsigned short size)
   unsigned short i = 0;
   
   DEBUGPRINT_F("\tCC3000: SpiReadDataSynchronous\n\r");
+#ifdef __AVR__
   SPI.setDataMode(SPI_MODE1);
+#endif
   for (i = 0; i < size; i ++)
   {
     data[i] = SPI.transfer(0x03);
