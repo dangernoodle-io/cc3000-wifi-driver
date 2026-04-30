@@ -19,7 +19,7 @@
   
   This sketch requires the Adafruit CC3000 library.  You can
   download the library from:
-    https://github.com/adafruit/Adafruit_CC3000_Library
+    https://github.com/adafruit/CC3000_Library
   
   For information on installing libraries in the Arduino IDE
   see this page:
@@ -52,7 +52,7 @@
   Written by Limor Fried & Kevin Townsend for Adafruit Industries.  
   BSD license, all text above must be included in any redistribution      
  ****************************************************/
-#include <Adafruit_CC3000.h>
+#include <CC3000.h>
 #include <SPI.h>
 #include "utility/debug.h"
 #include "utility/socket.h"
@@ -65,7 +65,7 @@
 // Use hardware SPI for the remaining pins
 // On an UNO, SCK = 13, MISO = 12, and MOSI = 11
 
-Adafruit_CC3000 cc3000 = Adafruit_CC3000(ADAFRUIT_CC3000_CS, ADAFRUIT_CC3000_IRQ, ADAFRUIT_CC3000_VBAT,
+CC3000 cc3000 = CC3000(ADAFRUIT_CC3000_CS, ADAFRUIT_CC3000_IRQ, ADAFRUIT_CC3000_VBAT,
                                          SPI_CLOCK_DIVIDER); // you can change this clock speed
 
 #define WLAN_SSID       "myNetwork"   // cannot be longer than 32 characters!
@@ -91,7 +91,7 @@ Adafruit_CC3000 cc3000 = Adafruit_CC3000(ADAFRUIT_CC3000_CS, ADAFRUIT_CC3000_IRQ
                                      // an incoming request to finish.  Don't set this
                                      // too high or your server could be slow to respond.
 
-Adafruit_CC3000_Server httpServer(LISTEN_PORT);
+CC3000_Server httpServer(LISTEN_PORT);
 uint8_t buffer[BUFFER_SIZE+1];
 int bufindex = 0;
 char action[MAX_ACTION+1];
@@ -149,7 +149,7 @@ void setup(void)
 void loop(void)
 {
   // Try to get a client which is connected.
-  Adafruit_CC3000_ClientRef client = httpServer.available();
+  CC3000_ClientRef client = httpServer.available();
   if (client) {
     Serial.println(F("Client connected."));
     // Process this request until it completes or times out.

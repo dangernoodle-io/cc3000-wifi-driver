@@ -27,7 +27,7 @@ module.
 
 */
 
-#include <Adafruit_CC3000.h>
+#include <CC3000.h>
 #include <ccspi.h>
 #include <SPI.h>
 #include <string.h>
@@ -40,7 +40,7 @@ module.
 #define ADAFRUIT_CC3000_CS    10
 // Use hardware SPI for the remaining pins
 // On an UNO, SCK = 13, MISO = 12, and MOSI = 11
-Adafruit_CC3000 cc3000 = Adafruit_CC3000(ADAFRUIT_CC3000_CS, ADAFRUIT_CC3000_IRQ, ADAFRUIT_CC3000_VBAT,
+CC3000 cc3000 = CC3000(ADAFRUIT_CC3000_CS, ADAFRUIT_CC3000_IRQ, ADAFRUIT_CC3000_VBAT,
                                          SPI_CLOCK_DIVIDER); // you can change this clock speed but DI
 
 #define WLAN_SSID       "myNetwork"        // cannot be longer than 32 characters!

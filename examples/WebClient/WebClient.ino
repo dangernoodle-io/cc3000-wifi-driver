@@ -25,7 +25,7 @@ This example does a test of the TCP client capability:
 SmartConfig is still beta and kind of works but is not fully vetted!
 It might not work on all networks!
 */
-#include <Adafruit_CC3000.h>
+#include <CC3000.h>
 #include <ccspi.h>
 #include <SPI.h>
 #include <string.h>
@@ -38,7 +38,7 @@ It might not work on all networks!
 #define ADAFRUIT_CC3000_CS    10
 // Use hardware SPI for the remaining pins
 // On an UNO, SCK = 13, MISO = 12, and MOSI = 11
-Adafruit_CC3000 cc3000 = Adafruit_CC3000(ADAFRUIT_CC3000_CS, ADAFRUIT_CC3000_IRQ, ADAFRUIT_CC3000_VBAT,
+CC3000 cc3000 = CC3000(ADAFRUIT_CC3000_CS, ADAFRUIT_CC3000_IRQ, ADAFRUIT_CC3000_VBAT,
                                          SPI_CLOCK_DIVIDER); // you can change this clock speed
 
 #define WLAN_SSID       "myNetwork"           // cannot be longer than 32 characters!
@@ -124,7 +124,7 @@ void setup(void)
   /* Try connecting to the website.
      Note: HTTP/1.1 protocol is used to keep the server from closing the connection before all data is read.
   */
-  Adafruit_CC3000_Client www = cc3000.connectTCP(ip, 80);
+  CC3000_Client www = cc3000.connectTCP(ip, 80);
   if (www.connected()) {
     www.fastrprint(F("GET "));
     www.fastrprint(WEBPAGE);

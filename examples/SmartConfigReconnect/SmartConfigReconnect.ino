@@ -34,14 +34,14 @@
         sketches, which erase all stored profiles from
         the CC3000 memory in order to manually establish
         a connection using hard coded values. (This sketch
-        uses an optional flag in the Adafruit_CC3000.begin
+        uses an optional flag in the CC3000.begin
         function to avoid this erasure process!).
 
     SmartConfig is still beta and kind of works but is not fully
     vetted! It might not work on all networks!
 */
 
-#include <Adafruit_CC3000.h>
+#include <CC3000.h>
 #include <ccspi.h>
 #include <SPI.h>
 #include <string.h>
@@ -57,7 +57,7 @@
 
 // Use hardware SPI for the remaining pins
 // On an UNO, SCK = 13, MISO = 12, and MOSI = 11
-Adafruit_CC3000 cc3000 = Adafruit_CC3000(ADAFRUIT_CC3000_CS, 
+CC3000 cc3000 = CC3000(ADAFRUIT_CC3000_CS, 
                                          ADAFRUIT_CC3000_IRQ, 
                                          ADAFRUIT_CC3000_VBAT,
                                          SPI_CLOCK_DIVIDER);
