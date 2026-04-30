@@ -25,5 +25,7 @@
   #ifndef strcpy_P
     #define strcpy_P(dst, src)    strcpy((dst), (src))
   #endif
-  typedef char prog_char;
 #endif
+
+// avr-gcc >= 5 dropped prog_char from <avr/pgmspace.h>; provide it unconditionally.
+typedef char prog_char;
