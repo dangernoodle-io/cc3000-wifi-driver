@@ -53,7 +53,7 @@
 // Adafruit CC3k Host Driver Difference
 // Arduino specific header includes & include debug header.
 // Noted 12-12-2014 by tdicola
-#include <avr/pgmspace.h>
+#include "pgmspace_compat.h"
 
 #ifdef __AVR__
   #include <avr/io.h>

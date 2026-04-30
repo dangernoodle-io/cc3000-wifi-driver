@@ -22,11 +22,9 @@
 /**************************************************************************/
 
 #include <Arduino.h>
+#include "pgmspace_compat.h"
 
 #define GCC_VERSION (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
-#if (GCC_VERSION >= 40702) || !defined(prog_char)
-typedef char PROGMEM prog_char;
-#endif
 
 #ifndef _CC3000_DEBUG
 #define _CC3000_DEBUG

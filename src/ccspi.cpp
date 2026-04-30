@@ -260,9 +260,14 @@ int init_spi(void)
 
   /* Initialise SPI (Mode 1) */
   SPI.begin();
+#ifdef __AVR__
   SPI.setDataMode(SPI_MODE1);
   SPI.setBitOrder(MSBFIRST);
   SPI.setClockDivider(g_SPIspeed);
+#else
+  SPI.beginTransaction(SPISettings(8000000, MSBFIRST, SPI_MODE1));
+  SPI.endTransaction();
+#endif
   
   SpiConfigStoreMy(); // prime ccspi_my* values for ASSERT
 
