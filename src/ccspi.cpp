@@ -164,8 +164,9 @@ void cc3k_int_poll(void);
 // or send function will stuck forever.
 #define CC3000_BUFFER_MAGIC_NUMBER (0xDE)
 
+// Shared half-duplex TX/RX buffer. HCI is request-response only, so TX and RX never
+// occur simultaneously. Single buffer suffices for both directions.
 char spi_buffer[CC3000_RX_BUFFER_SIZE];
-unsigned char wlan_tx_buffer[CC3000_TX_BUFFER_SIZE];
 
 static volatile char ccspi_is_in_irq = 0;
 static volatile char ccspi_int_enabled = 0;
@@ -213,7 +214,6 @@ void SpiOpen(gcSpiHandleRx pfRxHandler)
   sSpiInformation.ulSpiState = eSPI_STATE_POWERUP;
 
   memset(spi_buffer, 0, sizeof(spi_buffer));
-  memset(wlan_tx_buffer, 0, sizeof(wlan_tx_buffer));
 
   sSpiInformation.SPIRxHandler      = pfRxHandler;
   sSpiInformation.usTxPacketLength  = 0;
@@ -221,8 +221,7 @@ void SpiOpen(gcSpiHandleRx pfRxHandler)
   sSpiInformation.pRxPacket         = (unsigned char *)spi_buffer;
   sSpiInformation.usRxPacketLength  = 0;
   
-  spi_buffer[CC3000_RX_BUFFER_SIZE - 1]     = CC3000_BUFFER_MAGIC_NUMBER;
-  wlan_tx_buffer[CC3000_TX_BUFFER_SIZE - 1] = CC3000_BUFFER_MAGIC_NUMBER;
+  spi_buffer[CC3000_RX_BUFFER_SIZE - 1] = CC3000_BUFFER_MAGIC_NUMBER;
 
   /* Enable interrupt on the GPIO pin of WLAN IRQ */
   tSLInformation.WlanInterruptEnable();
