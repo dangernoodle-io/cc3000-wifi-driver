@@ -1,0 +1,10 @@
+name: release
+on:
+  push:
+    tags: ['v*']
+jobs:
+  release:
+    uses: dangernoodle-io/.github/.github/workflows/gh-release.yml@main
+    secrets: inherit
+    permissions:
+      contents: write
