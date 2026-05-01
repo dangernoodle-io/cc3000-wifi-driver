@@ -1,6 +1,6 @@
 PIO ?= pio
 
-.PHONY: help check test coverage smoke smoke-uno smoke-r4-minima webclient webclient-uno webclient-r4-minima tcp_echo tcp_echo-uno tcp_echo-r4-minima poll_demo poll_demo-uno poll_demo-r4-minima seed-secrets clean
+.PHONY: help check test coverage smoke smoke-uno smoke-r4-minima webclient webclient-uno webclient-r4-minima tcp_echo tcp_echo-uno tcp_echo-r4-minima poll_demo poll_demo-uno poll_demo-r4-minima seed-secrets clean release-prep release-tag
 
 help: ## Show available targets
 	@grep -E '^[a-zA-Z_%-]+:.*##' $(MAKEFILE_LIST) | sort | \
@@ -64,3 +64,34 @@ clean: ## Clean PIO build artifacts
 	$(PIO) run -d examples/webclient -t clean
 	$(PIO) run -d examples/tcp_echo -t clean
 	$(PIO) run -d examples/poll_demo -t clean
+
+# --- Release ---------------------------------------------------------------
+# Two-step because branch protection requires PR-mediated merges.
+#
+#   make release-prep VERSION=X.Y.Z   -> branch + bump library.properties + PR
+#   (review + merge PR via gh / GitHub UI)
+#   make release-tag  VERSION=X.Y.Z   -> tag main + push tag (release.yml fires)
+#
+# VERSION must be semver (X.Y.Z, no leading v).
+
+release-prep: ## Open a version-bump PR (VERSION=X.Y.Z required)
+	@test -n "$(VERSION)" || { echo "error: VERSION required (e.g. make release-prep VERSION=0.2.0)"; exit 1; }
+	@echo "$(VERSION)" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+$$' || { echo "error: VERSION must be semver X.Y.Z"; exit 1; }
+	@test "$$(git rev-parse --abbrev-ref HEAD)" = "main" || { echo "error: must be on main"; exit 1; }
+	git pull
+	git checkout -b jae/bump-version-$(VERSION)
+	sed -i '' -e 's/^version=.*/version=$(VERSION)/' library.properties
+	git add library.properties
+	git commit -S -m "chore: bump version to $(VERSION)"
+	git push -u origin jae/bump-version-$(VERSION)
+	gh create-pull-request-auto
+
+release-tag: ## Tag main + push tag (VERSION=X.Y.Z required, after PR merged)
+	@test -n "$(VERSION)" || { echo "error: VERSION required (e.g. make release-tag VERSION=0.2.0)"; exit 1; }
+	@echo "$(VERSION)" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+$$' || { echo "error: VERSION must be semver X.Y.Z"; exit 1; }
+	@test "$$(git rev-parse --abbrev-ref HEAD)" = "main" || { echo "error: must be on main"; exit 1; }
+	git pull
+	@grep -q '^version=$(VERSION)$$' library.properties || { echo "error: library.properties version != $(VERSION); merge release-prep PR first"; exit 1; }
+	@git rev-parse v$(VERSION) >/dev/null 2>&1 && { echo "error: tag v$(VERSION) already exists"; exit 1; } || true
+	git tag -s -a v$(VERSION) -m "chore: v$(VERSION) tag"
+	git push origin v$(VERSION)

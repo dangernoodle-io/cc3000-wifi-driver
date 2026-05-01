@@ -111,6 +111,18 @@ make coverage           # gcovr report
 make check              # cppcheck
 ```
 
+## Releasing
+
+Branch protection requires PR-mediated changes, so cutting a release is two steps:
+
+```sh
+make release-prep VERSION=0.2.0   # branch + bump library.properties + open PR
+# review + merge the PR
+make release-tag  VERSION=0.2.0   # tag main + push tag, release.yml fires
+```
+
+The tag triggers `.github/workflows/release.yml`, which calls the org-shared `gh-release` workflow to create a GitHub Release with auto-generated changelog from PR labels.
+
 ## License
 
 BSD 2-Clause. Vendored portions copyright Adafruit Industries (Limor Fried, Kevin Townsend) and Tony DiCola; per-file headers preserved.
