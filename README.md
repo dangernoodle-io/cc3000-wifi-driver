@@ -1,6 +1,13 @@
 # cc3000-wifi-driver
 
+[![Build](https://github.com/dangernoodle-io/cc3000-wifi-driver/actions/workflows/ci.yml/badge.svg)](https://github.com/dangernoodle-io/cc3000-wifi-driver/actions/workflows/ci.yml)
+[![Coverage Status](https://coveralls.io/repos/github/dangernoodle-io/cc3000-wifi-driver/badge.svg?branch=main)](https://coveralls.io/github/dangernoodle-io/cc3000-wifi-driver?branch=main)
+[![Release](https://img.shields.io/github/v/release/dangernoodle-io/cc3000-wifi-driver?display_name=tag&sort=semver)](https://github.com/dangernoodle-io/cc3000-wifi-driver/releases/latest)
+
 Arduino library for the TI CC3000 WiFi chip. Vendored from Adafruit_CC3000_Library; trimmed and ported to Arduino UNO R4 Minima.
+
+> **Maintained by AI** — This project is developed and maintained by Claude (via [@dangernoodle-io](https://github.com/dangernoodle-io)).
+> If you find a bug or have a feature request, please [open an issue](https://github.com/dangernoodle-io/cc3000-wifi-driver/issues) with examples so it can be addressed.
 
 ## When to use this
 
@@ -13,10 +20,10 @@ Use the original [Adafruit_CC3000_Library](https://github.com/adafruit/Adafruit_
 
 ## Supported boards
 
-| FQBN family               | Board          | Validated     |
-|---------------------------|----------------|---------------|
-| `arduino:avr:uno`         | UNO R3         | yes — hardware test passed |
-| `arduino:renesas_uno:minima` | UNO R4 Minima | compile-only — no hardware yet |
+| FQBN family               | Board          | Validated |
+|---------------------------|----------------|-----------|
+| `arduino:avr:uno`         | UNO R3         | yes       |
+| `arduino:renesas_uno:minima` | UNO R4 Minima | yes    |
 
 3.3V signaling required. The Adafruit breakout has level shifters for 5V boards; bare CC3000 modules need external level shifters with the UNO R3.
 
@@ -39,7 +46,7 @@ void setup() {
 }
 ```
 
-See `examples/smoke/` for a working build with WiFi associate + DHCP.
+See `examples/smoke/` for the canonical build with WiFi associate + DHCP. Other examples: `webclient/` (HTTP GET), `tcp_echo/` (TCP server), `poll_demo/` (periodic GET while keeping the loop responsive).
 
 ## Non-blocking patterns
 
@@ -73,12 +80,24 @@ Compile-time knobs in `src/cc3000_config.h`. Override via `build_flags` in `plat
 
 ## Memory footprint
 
-Validated on UNO R3 + Adafruit CC3000 breakout, smoke example:
+Validated on hardware, smoke example:
 
-|        | RAM   | Flash    |
-|--------|------:|---------:|
-| AVR    | 664 B | 10,648 B |
+|        | RAM     | Flash    |
+|--------|--------:|---------:|
+| AVR    | 664 B   | 10,648 B |
 | R4     | 3,560 B | 46,440 B |
+
+### Memory tips
+
+On AVR, ~157 B of the resident RAM is Arduino's `HardwareSerial` ring buffers (RX + TX, 64 B each by default — not driver code). Sketches that don't need full buffers can recover up to **64 B** by halving them in `platformio.ini`:
+
+```ini
+build_flags =
+    -DSERIAL_RX_BUFFER_SIZE=32
+    -DSERIAL_TX_BUFFER_SIZE=32
+```
+
+Lower than 32 risks dropped serial chars at high baud.
 
 ## Local development
 
@@ -87,6 +106,8 @@ PlatformIO required. On Apple Silicon, the `atmelavr` and `renesas-ra` toolchain
 ```sh
 make smoke-uno          # AVR build
 make smoke-r4-minima    # Cortex-M build
+make test               # host unit tests + Unity
+make coverage           # gcovr report
 make check              # cppcheck
 ```
 
