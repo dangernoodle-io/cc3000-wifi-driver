@@ -185,6 +185,9 @@ typedef UINT32 time_t;  /* KTown: Updated to be compatible with Arduino Time.h *
 typedef UINT32 clock_t;
 typedef INT32 suseconds_t;
 
+// Skip struct timeval redefinition on off-target platforms (they have it in libc).
+// On Arduino (AVR/ARM via Arduino IDE), the struct is not defined yet.
+#if defined(__AVR__) || defined(ARDUINO)
 typedef struct timeval timeval;
 
 struct timeval
@@ -192,6 +195,7 @@ struct timeval
     time_t         tv_sec;                  /* seconds */
     suseconds_t    tv_usec;                 /* microseconds */
 };
+#endif
 
 typedef CHAR *(*tFWPatches)(UINT32 *usLength);
 
