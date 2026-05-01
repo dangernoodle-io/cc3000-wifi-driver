@@ -10,3 +10,6 @@ platform_packages =
 platform_packages =
     toolchain-gccarmnoneeabi@symlink:///Users/YOUR_USERNAME/.local/pio-arm-none-eabi
     tool-bossac@symlink:///Users/YOUR_USERNAME/.local/pio-bossac
+    ; Native arm64 dfu-util via wrapper that translates Arduino's -Q to mainline -R.
+    ; brew install dfu-util; pio-dfuutil-arduino/ contains a wrapper script + symlink.
+    tool-dfuutil-arduino@symlink:///Users/YOUR_USERNAME/.local/pio-dfuutil-arduino
