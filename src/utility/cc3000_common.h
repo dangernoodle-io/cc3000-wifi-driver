@@ -177,14 +177,17 @@ extern "C" {
 #ifdef __AVR__
 typedef UINT32 time_t;  /* KTown: Updated to be compatible with Arduino Time.h */
 #else
-typedef INT32 time_t;
+// Pull in libc time_t before any cc3000 typedef so the libc guards take effect
+// (newlib sets __time_t_defined). Using libc's time_t directly avoids the
+// 'conflicting declaration' error seen with some arm-none-eabi versions.
+#include <time.h>
 #endif
 typedef UINT32 clock_t;
 typedef INT32 suseconds_t;
 
 typedef struct timeval timeval;
 
-struct timeval 
+struct timeval
 {
     time_t         tv_sec;                  /* seconds */
     suseconds_t    tv_usec;                 /* microseconds */
