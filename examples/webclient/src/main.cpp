@@ -46,8 +46,8 @@ void setup() {
 
     // Resolve httpbin.org hostname to IP
     uint32_t hostIP = 0;
-    uint16_t dnsStatus = cc3000.getHostByName("httpbin.org", &hostIP);
-    if (dnsStatus != 0) {
+    cc3000.getHostByName("httpbin.org", &hostIP);
+    if (hostIP == 0) {
         Serial.println(F("FAIL: getHostByName"));
         while (1) {}
     }
