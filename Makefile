@@ -1,6 +1,6 @@
 PIO ?= pio
 
-.PHONY: help check smoke smoke-uno smoke-r4-minima webclient webclient-uno webclient-r4-minima tcp_echo tcp_echo-uno tcp_echo-r4-minima poll_demo poll_demo-uno poll_demo-r4-minima seed-secrets clean
+.PHONY: help check test coverage smoke smoke-uno smoke-r4-minima webclient webclient-uno webclient-r4-minima tcp_echo tcp_echo-uno tcp_echo-r4-minima poll_demo poll_demo-uno poll_demo-r4-minima seed-secrets clean
 
 help: ## Show available targets
 	@grep -E '^[a-zA-Z_%-]+:.*##' $(MAKEFILE_LIST) | sort | \
@@ -12,6 +12,14 @@ check: ## Static analysis (cppcheck if available)
 	else \
 		echo "cppcheck not found, skipping"; \
 	fi
+
+test: ## Run host unit tests
+	$(PIO) test -e native
+
+coverage: test ## Coverage report (gcovr -> Coveralls JSON)
+	gcovr --root . --filter 'src/' \
+	    --exclude-throw-branches --exclude-unreachable-branches \
+	    --print-summary --coveralls gcovr-coveralls.json
 
 seed-secrets: ## Seed secrets.h for all examples from templates if missing
 	@cp -n examples/smoke/include/secrets.h.example examples/smoke/include/secrets.h 2>/dev/null || true
