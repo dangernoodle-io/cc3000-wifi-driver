@@ -44,6 +44,7 @@
 #define __COMMON_H__
 
 #include "data_types.h"
+#include "cc3000_decode.h"
 #include "error_codes.h"
 
 //******************************************************************************

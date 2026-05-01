@@ -52,6 +52,7 @@
 *
 *****************************************************************************/
 #include "cc3000_common.h"
+#include "cc3000_decode.h"
 #include "socket.h"
 #include "wlan.h"
 #include "evnt_handler.h"
@@ -122,74 +123,6 @@ UINT8* UINT16_TO_STREAM_f (UINT8 *p, UINT16 u16)
 	*(p)++ = (UINT8)(u16);
 	*(p)++ = (UINT8)((u16) >> 8);
 	return p;
-}
-
-//*****************************************************************************
-//
-//!  STREAM_TO_UINT16_f
-//!
-//!  @param  p          pointer to the stream
-//!  @param  offset     offset in the stream
-//!
-//!  @return               pointer to the new 16 bit
-//!
-//!  @brief               This function is used for copying received stream to
-//!                       16 bit in little endian format.
-//
-//*****************************************************************************
-
-UINT16 STREAM_TO_UINT16_f(CHAR* cp, UINT16 offset)
-{
-  // Adafruit CC3k Host Driver Difference
-  // Explicit cast to UINT8 pointer is required or decoding parameters breaks on Arduino.
-  // Noted 12-12-2014 by tdicola
-  UINT8 *p = (UINT8 *)cp;
-  /*
-  DEBUGPRINT_F("Stream2u16: ");
-  DEBUGPRINT_HEX(cp[offset+1]);
-  DEBUGPRINT_F(" + ");
-  DEBUGPRINT_HEX(cp[offset]);
-  DEBUGPRINT_F("\n\r");
-  */
-
-  return (UINT16)((UINT16)((UINT16)
-          (*(p + offset + 1)) << 8) + (UINT16)(*(p + offset)));
-}
-
-//*****************************************************************************
-//
-//!  STREAM_TO_UINT32_f
-//!
-//!  @param  p          pointer to the stream
-//!  @param  offset     offset in the stream
-//!
-//!  @return               pointer to the new 32 bit
-//!
-//!  @brief               This function is used for copying received stream to
-//!                       32 bit in little endian format.
-//
-//*****************************************************************************
-
-UINT32 STREAM_TO_UINT32_f(CHAR* cp, UINT16 offset)
-{
-  // Adafruit CC3k Host Driver Difference
-  // Explicit cast to UINT8 pointer is required or decoding parameters breaks on Arduino.
-  // Noted 12-12-2014 by tdicola
-  UINT8 *p = (UINT8 *)cp;
-  
-  /*
-  DEBUGPRINT_F("\tStream2u32: ");
-  DEBUGPRINT_HEX(cp[offset+3]);  DEBUGPRINT_F(" + ");
-  DEBUGPRINT_HEX(cp[offset+2]);  DEBUGPRINT_F(" + ");
-  DEBUGPRINT_HEX(cp[offset+1]);  DEBUGPRINT_F(" + ");
-  DEBUGPRINT_HEX(cp[offset]);
-  DEBUGPRINT_F("\n\r");
-  */
-
-  return (UINT32)((UINT32)((UINT32)
-	(*(p + offset + 3)) << 24) + (UINT32)((UINT32)
-	(*(p + offset + 2)) << 16) + (UINT32)((UINT32)
-	(*(p + offset + 1)) << 8) + (UINT32)(*(p + offset)));
 }
 
 
