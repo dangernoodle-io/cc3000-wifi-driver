@@ -11,12 +11,13 @@ jobs:
       - uses: actions/checkout@v6
       - run: sudo apt-get update && sudo apt-get install -y cppcheck
       - run: make check
-  smoke:
+  build:
     needs: lint
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        example: [uno, r4-minima]
+        example: [smoke, webclient]
+        board: [uno, r4-minima]
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-python@v6
@@ -29,14 +30,14 @@ jobs:
           key: ${{ runner.os }}-pio-${{ hashFiles('**/platformio.ini') }}
           restore-keys: ${{ runner.os }}-pio-
       - run: pip install platformio
-      - run: make smoke-${{ matrix.example }}
+      - run: make ${{ matrix.example }}-${{ matrix.board }}
   summary:
     if: always()
-    needs: [lint, smoke]
+    needs: [lint, build]
     runs-on: ubuntu-latest
     steps:
       - run: |
-          if [ "${{ needs.lint.result }}" != "success" ] || [ "${{ needs.smoke.result }}" != "success" ]; then
-            echo "lint=${{ needs.lint.result }} smoke=${{ needs.smoke.result }}"
+          if [ "${{ needs.lint.result }}" != "success" ] || [ "${{ needs.build.result }}" != "success" ]; then
+            echo "lint=${{ needs.lint.result }} build=${{ needs.build.result }}"
             exit 1
           fi
