@@ -26,9 +26,13 @@ jobs:
         run: make check
       - name: Tests
         run: make test
-      # Coverage upload disabled until tests exercise enough src/ code to be
-      # meaningful. Most of src/ is hardware-coupled and can't compile off-target.
-      # See backlog item for restoring Coveralls when async sockets land.
+      - name: Coverage
+        run: make coverage
+      - name: Upload coverage to Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          file: ./build/native/coverage/gcovr-coveralls.json
+          format: json
   build:
     needs: test
     runs-on: ubuntu-latest
