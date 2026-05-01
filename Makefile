@@ -15,10 +15,13 @@ check: ## Static analysis (cppcheck if available)
 
 smoke: smoke-uno smoke-r4-minima ## Build smoke example for all boards
 
-smoke-uno: ## Build smoke for Arduino UNO R3 (AVR) + CC3000
+smoke-secrets: ## Seed examples/smoke/include/secrets.h from the example if missing
+	@cp -n examples/smoke/include/secrets.h.example examples/smoke/include/secrets.h 2>/dev/null || true
+
+smoke-uno: smoke-secrets ## Build smoke for Arduino UNO R3 (AVR) + CC3000
 	$(PIO) run -d examples/smoke -e uno
 
-smoke-r4-minima: ## Build smoke for Arduino UNO R4 Minima + CC3000
+smoke-r4-minima: smoke-secrets ## Build smoke for Arduino UNO R4 Minima + CC3000
 	$(PIO) run -d examples/smoke -e r4_minima
 
 clean: ## Clean PIO build artifacts
