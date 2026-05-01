@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        example: [smoke, webclient, tcp_echo]
+        example: [smoke, webclient, tcp_echo, poll_demo]
         board: [uno, r4-minima]
     steps:
       - uses: actions/checkout@v6

@@ -41,6 +41,25 @@ void setup() {
 
 See `examples/smoke/` for a working build with WiFi associate + DHCP.
 
+## Non-blocking patterns
+
+The CC3000's host driver enforces synchronous behavior on chip-level operations — there is no `EINPROGRESS` / `EWOULDBLOCK` path in the firmware. Use this table to plan sketch structure:
+
+| Operation | Blocking? | Notes |
+|-----------|-----------|-------|
+| `cc3000.begin()` | yes | one-time, ~1s |
+| `cc3000.connectToAP()` | yes | one-time, ~5–10s |
+| `cc3000.checkDHCP()` | non-blocking poll | call in a `while` until true |
+| `cc3000.getHostByName()` | yes | seconds; resolve once and cache |
+| `client.connect(ip, port)` | yes | TCP handshake, ~1s |
+| `client.available()` / `client.read()` | non-blocking | safe to call every loop |
+| `client.write()` | mostly non-blocking | chip buffers outgoing data |
+| `server.available()` | non-blocking | poll every loop |
+
+**Recommended structure:** do all blocking setup (associate, DHCP, DNS, initial connect) in `setup()`. Drive any other work and read I/O in `loop()` via the polling APIs.
+
+See `examples/poll_demo/` for a sketch that does periodic HTTP GETs while keeping the loop responsive.
+
 ## Configuration
 
 Compile-time knobs in `src/cc3000_config.h`. Override via `build_flags` in `platformio.ini` or `-D` flags.
