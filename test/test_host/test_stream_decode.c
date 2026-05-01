@@ -4,7 +4,11 @@
 
 #include "unity.h"
 #include "data_types.h"
-#include "cc3000_common.h"
+
+// Forward-declare the functions under test (avoids pulling in the full
+// cc3000_common.h, which would require Arduino-side socket headers).
+extern UINT16 STREAM_TO_UINT16_f(CHAR* cp, UINT16 offset);
+extern UINT32 STREAM_TO_UINT32_f(CHAR* cp, UINT16 offset);
 
 void test_stream_to_uint16_zero(void) {
     CHAR buf[2] = { 0x00, 0x00 };
