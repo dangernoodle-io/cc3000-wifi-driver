@@ -11,3 +11,11 @@ build/
 .code-graph/
 platformio_local.ini
 examples/smoke/include/secrets.h
+*.gcda
+*.gcno
+gcovr-coveralls.json
+compile_commands.json
+platformio_override.ini
+examples/poll_demo/include/secrets.h
+examples/tcp_echo/include/secrets.h
+examples/webclient/include/secrets.h
