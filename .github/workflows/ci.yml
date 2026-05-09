@@ -6,31 +6,10 @@ on:
     branches: [main]
 jobs:
   test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-python@v6
-        with:
-          python-version: '3.11'
-      - name: Cache PlatformIO
-        uses: actions/cache@v5
-        with:
-          path: ~/.platformio
-          key: ${{ runner.os }}-pio-${{ hashFiles('**/platformio.ini') }}
-          restore-keys: ${{ runner.os }}-pio-
-      - name: Install tools
-        run: |
-          sudo apt-get update && sudo apt-get install -y cppcheck
-          pip install platformio gcovr
-      - name: Static analysis
-        run: make check
-      - name: Coverage
-        run: make coverage
-      - name: Upload coverage to Coveralls
-        uses: coverallsapp/github-action@v2
-        with:
-          file: gcovr-coveralls.json
-          format: coveralls
+    uses: dangernoodle-io/.github/.github/workflows/pio-test.yml@main
+    with:
+      cppcheck-apt-install: true
+    secrets: inherit
   build:
     needs: test
     runs-on: ubuntu-latest
@@ -43,6 +22,11 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.11'
+      - name: Cache pip
+        uses: actions/cache@v5
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-pio
       - name: Cache PlatformIO
         uses: actions/cache@v5
         with:
